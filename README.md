@@ -67,6 +67,3 @@ jupyter notebook notebooks/glow25_funnel_analysis.ipynb
 
 Load the SQLite database in Python first (see `sql/README_sql.md`), then run any `.sql` file from the `sql/` folder.
 
-## Live demo
-
-*Coming soon — deploy instructions in `docs/deployment.md`*
