@@ -35,10 +35,12 @@ def compute_funnel(df):
         .apply(lambda x: set(x))
         .reset_index()
     )
-    viewers = user_events["user_id"].nunique()
-    carted = user_events[user_events["event_type"].apply(lambda s: "cart" in s)]["user_id"].nunique()
-    purchasers = user_events[user_events["event_type"].apply(lambda s: "purchase" in s)]["user_id"].nunique()
-    return viewers, carted, purchasers
+    user_events.columns = ["user_id", "events_set"]
+    viewers    = len(user_events)
+    carted     = user_events["events_set"].apply(lambda s: "cart" in s).sum()
+    # purchasers must have also carted — enforces proper sequential funnel
+    purchasers = user_events["events_set"].apply(lambda s: "purchase" in s and "cart" in s).sum()
+    return int(viewers), int(carted), int(purchasers)
 
 
 @st.cache_data
@@ -47,9 +49,10 @@ def compute_country_funnel(df):
     for country in df["country"].unique():
         sub = df[df["country"] == country]
         users = sub.groupby("user_id")["event_type"].apply(set)
-        viewers = len(users)
-        carted = users.apply(lambda s: "cart" in s).sum()
-        purchasers = users.apply(lambda s: "purchase" in s).sum()
+        viewers    = len(users)
+        carted     = users.apply(lambda s: "cart" in s).sum()
+        # same sequential rule: purchased ⊆ carted ⊆ viewed
+        purchasers = users.apply(lambda s: "purchase" in s and "cart" in s).sum()
         rows.append({
             "country": country,
             "viewers": viewers,
@@ -69,7 +72,7 @@ def compute_channel_cvr(df):
         sub = df[df["channel"] == channel]
         users = sub.groupby("user_id")["event_type"].apply(set)
         viewers = len(users)
-        purchasers = users.apply(lambda s: "purchase" in s).sum()
+        purchasers = users.apply(lambda s: "purchase" in s and "cart" in s).sum()
         rows.append({
             "channel": channel,
             "sessions": viewers,
@@ -178,7 +181,7 @@ if page == "Funnel Overview":
         sub = df[df["device"] == dev]
         u = sub.groupby("user_id")["event_type"].apply(set)
         v = len(u)
-        p = u.apply(lambda s: "purchase" in s).sum()
+        p = u.apply(lambda s: "purchase" in s and "cart" in s).sum()
         device_cvr.append({"device": dev, "cvr_pct": round(100 * p / v, 2) if v else 0})
     device_df = pd.DataFrame(device_cvr).sort_values("cvr_pct", ascending=False)
 
