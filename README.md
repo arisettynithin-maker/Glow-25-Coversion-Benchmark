@@ -6,6 +6,17 @@ Glow25 sells collagen products across four European markets — Germany, Netherl
 
 That's the gap I wanted to close.
 
+Live Link: https://glow-25-coversion-benchmark.streamlit.app/
+
+<img width="2508" height="1263" alt="image" src="https://github.com/user-attachments/assets/64da7929-1670-4718-b475-77d117203da9" />
+
+<img width="2501" height="1180" alt="image" src="https://github.com/user-attachments/assets/defdd3af-f288-4a47-8ff0-4f5ce16dfd7c" />
+
+<img width="2485" height="1162" alt="image" src="https://github.com/user-attachments/assets/8785ce76-7ae4-434e-a9ef-8a2800422820" />
+
+<img width="2518" height="1107" alt="image" src="https://github.com/user-attachments/assets/c236a831-59b8-4fd9-9d6e-f3d2ef8bd942" />
+
+
 ## What I built and why
 
 A full analytics stack around a multi-country DTC purchase funnel:
